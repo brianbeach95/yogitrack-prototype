@@ -1,0 +1,50 @@
+[
+  {
+    "attendanceId": "A001",
+    "classId": "CL001",
+    "customerId": "C001",
+    "attendanceDateTime": "2026-09-07T18:00:00"
+  },
+  {
+    "attendanceId": "A002",
+    "classId": "CL001",
+    "customerId": "C002",
+    "attendanceDateTime": "2026-09-07T18:00:00"
+  },
+  {
+    "attendanceId": "A003",
+    "classId": "CL001",
+    "customerId": "C003",
+    "attendanceDateTime": "2026-09-07T18:00:00"
+  },
+  {
+    "attendanceId": "A004",
+    "classId": "CL003",
+    "customerId": "C001",
+    "attendanceDateTime": "2026-09-08T17:30:00"
+  },
+  {
+    "attendanceId": "A005",
+    "classId": "CL002",
+    "customerId": "C001",
+    "attendanceDateTime": "2026-09-09T18:00:00"
+  },
+  {
+    "attendanceId": "A006",
+    "classId": "CL003",
+    "customerId": "C002",
+    "attendanceDateTime": "2026-09-15T17:30:00"
+  },
+  {
+    "attendanceId": "A007",
+    "classId": "CL005",
+    "customerId": "C003",
+    "attendanceDateTime": "2026-09-17T19:00:00"
+  },
+  {
+    "attendanceId": "A008",
+    "classId": "CL001",
+    "customerId": "C003",
+    "attendanceDateTime": "2026-09-14T18:00:00"
+  }
+]

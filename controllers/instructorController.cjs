@@ -2,9 +2,9 @@ const Instructor = require("../models/instructorModel.cjs");
 
 exports.search = async (req, res) => {
   try {
-    const searchString = req.query.firstname;
+    const searchString = req.query.firstName;
     const instructor = await Instructor.find({
-      firstname: { $regex: searchString, $options: "i" },
+      firstName: { $regex: searchString, $options: "i" },
     });
 
     if (!instructor || instructor.length == 0) {
@@ -33,28 +33,28 @@ exports.add = async (req, res) => {
   try {
     const {
       instructorId,
-      firstname,
-      lastname,
+      firstName,
+      lastName,
       email,
       phone,
       address,
-      preferredContact
+      preferredCommunication
     } = req.body;
 
     // Basic validation
-    if (!firstname || !lastname || !email || !phone) {
+    if (!firstName || !lastName || !email || !phone) {
       return res.status(400).json({ message: "Missing required fields" });
     }
 
     // Create a new instructor document
     const newInstructor = new Instructor({
       instructorId,
-      firstname,
-      lastname,
+      firstName,
+      lastName,
       address,
       phone,
       email,
-      preferredContact
+      preferredCommunication
     });
 
     // Save to database
@@ -71,7 +71,7 @@ exports.getInstructorIds = async (req, res) => {
   try {
     const instructors = await Instructor.find(
       {},
-      { instructorId: 1, firstname: 1, lastname: 1, _id: 0 }
+      { instructorId: 1, firstName: 1, lastName: 1, _id: 0 }
     ).sort();
 
     res.json(instructors);

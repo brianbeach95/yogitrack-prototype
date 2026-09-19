@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>YogiTrack • Instructors</title>
+  <title>YogiTrack • Customers</title>
   <link rel="stylesheet" href="../css/style.css">
 </head>
 <body class="layout--sidebar">
@@ -15,30 +15,40 @@
          <a href="instructor.html">Instructors</a>
         <a href="#">Packages</a>
         <a href="#">Class Schedule</a>
-        <a href="customer.html"">Customers</a>
+        <a href="customer.html">Customers</a>
         <a href="#">Check-ins</a>
         <a href="../index.html">Log Out</a>
     </nav>
   </aside>
 
-  <!-- Instructor form -->
+  <!-- Customer form -->
   <main class="layout--center">
-    <form class="card" id="instructorForm" >
-      <h2>Instructor Details</h2>
+    <form class="card" id="customerForm" >
+      <h2>Customer Details</h2>
 
-      <!-- Instructor Id-->
-      <label id = "instructorIdLabel" for="instructorID">Instructor ID
-        <select name="instructorId" id="instructorIdSelect" class="form-input" required>
-          <option value=""> -- Select Instructor Id --</option>
-          <!-- Options will be populated by JavaScript-->
-        </select>
-      </label>
+      <div class="customer-id-row">
+        <!-- Customer Id-->
+        <label id = "customerIdLabel" for="customerID">Customer ID
+            <select name="customerId" id="customerIdSelect" class="form-input" required>
+            <option value=""> -- Select Customer Id --</option>
+            </select>
+        </label>
 
-      <label>
-        <!-- Toggle with InstructorIdLabel -->
-         <label id="instructorIdTextLabel" style="display: none;">Instructor ID</label>
-         <input id="instructorIdText" type="text" name="instructorId" readonly />
-      </label>
+        <label>Class Balance
+            <input type="number" name="classBalance" readonly>
+        </label>
+      </div>
+
+      <div id="customerIdAddSelection" style="display: none;">
+        <label>Customer ID
+            <input id="customerIdText" type="text" name="customerId" readonly>
+        </label>
+      </div>
+
+      <!-- <label>
+         <label id="customerIdTextLabel" style="display: none;">Customer ID</label>
+         <input id="customerIdText" type="text" name="customerId" readonly />
+      </label> -->
 
 
       <div class="grid-2">
@@ -56,7 +66,7 @@
 
       <div class="grid-2">
         <label>Phone
-          <input type="tel" name="phone">
+          <input type="tel" name="phone" id="phone" maxlength="12" inputmode="numeric">
         </label>
         <label>Email
           <input type="email" name="email">
@@ -77,12 +87,12 @@
         <button type="button" class="btn btn--primary", id="addBtn">Add&nbsp;New</button>
         <button type="button" class="btn", id="saveBtn">Save</button>
         <button type="button" class="btn btn--danger" id="deleteBtn">Delete</button>
-        <button type="button" class="btn" onclick="clearInstructorForm()">Clear</button>
+        <button type="button" class="btn" onclick="clearCustomerForm()">Clear</button>
         <a href="dashboard.html" class="btn">Exit</a>
       </div>
     </form>
   </main>
 
-<script src="../js/instructor.js"></script>
+<script src="../js/customer.js"></script>
 </body>
 </html>

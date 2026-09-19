@@ -167,3 +167,10 @@ select.form-input {
   background-position: right 0.7rem top 50%;
   background-size: 0.65rem auto;
 }
+
+/*customer CSS */
+.customer-id-row {
+    display: grid;
+    grid-template-columns: 3fr 1fr;
+    gap: 1rem;
+}

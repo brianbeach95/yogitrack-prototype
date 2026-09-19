@@ -1,0 +1,52 @@
+[
+  {
+    "packageId": "P001",
+    "packageName": "General Drop-In",
+    "packageCategory": "General",
+    "numberOfClasses": "1",
+    "classType": "General",
+    "startDate": "2026-09-01",
+    "endDate": "2026-09-30",
+    "price": 20
+  },
+  {
+    "packageId": "P002",
+    "packageName": "General 4-Class Package",
+    "packageCategory": "General",
+    "numberOfClasses": "4",
+    "classType": "General",
+    "startDate": "2026-09-01",
+    "endDate": "2026-10-01",
+    "price": 70
+  },
+  {
+    "packageId": "P003",
+    "packageName": "General 10-Class Package",
+    "packageCategory": "General",
+    "numberOfClasses": "10",
+    "classType": "General",
+    "startDate": "2026-09-01",
+    "endDate": "2026-12-01",
+    "price": 150
+  },
+  {
+    "packageId": "P004",
+    "packageName": "Senior 10-Class Package",
+    "packageCategory": "Senior",
+    "numberOfClasses": "10",
+    "classType": "General",
+    "startDate": "2026-09-01",
+    "endDate": "2026-12-01",
+    "price": 120
+  },
+  {
+    "packageId": "P005",
+    "packageName": "Special Workshop",
+    "packageCategory": "General",
+    "numberOfClasses": "1",
+    "classType": "Special",
+    "startDate": "2026-10-01",
+    "endDate": "2026-10-01",
+    "price": 45
+  }
+]

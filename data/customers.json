@@ -1,0 +1,42 @@
+[
+  {
+    "customerId": "C001",
+    "firstName": "Sarah",
+    "lastName": "Mitchell",
+    "address": "125 Oak Street, Tulsa, OK 74133",
+    "phone": "412-555-0142",
+    "email": "sarah.mitchell@example.com",
+    "preferredCommunication": "Email",
+    "classBalance": 7
+  },
+  {
+    "customerId": "C002",
+    "firstName": "Robert",
+    "lastName": "Johnson",
+    "address": "48 Maple Avenue, Tulsa, OK 74135",
+    "phone": "412-555-0187",
+    "email": "robert.johnson@example.com",
+    "preferredCommunication": "Phone",
+    "classBalance": 2
+  },
+  {
+    "customerId": "C003",
+    "firstName": "Emily",
+    "lastName": "Davis",
+    "address": "731 Pine Road, Tulsa, OK 74138",
+    "phone": "412-555-0126",
+    "email": "emily.davis@example.com",
+    "preferredCommunication": "Email",
+    "classBalance": 10
+  },
+  {
+    "customerId": "C004",
+    "firstName": "Michael",
+    "lastName": "Thompson",
+    "address": "92 Walnut Street, Tulsa, OK 74137",
+    "phone": "412-555-0194",
+    "email": "michael.thompson@example.com",
+    "preferredCommunication": "Phone",
+    "classBalance": 0
+  }
+]

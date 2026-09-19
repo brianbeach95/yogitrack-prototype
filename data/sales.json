@@ -1,0 +1,52 @@
+[
+  {
+    "saleId": "S001",
+    "customerId": "C001",
+    "packageId": "P003",
+    "amountPaid": 150,
+    "paymentMode": "Credit Card",
+    "dateTimePaid": "2026-09-05T10:15:00",
+    "validityStartDate": "2026-09-05",
+    "validityEndDate": "2026-12-05"
+  },
+  {
+    "saleId": "S002",
+    "customerId": "C002",
+    "packageId": "P002",
+    "amountPaid": 70,
+    "paymentMode": "Cash",
+    "dateTimePaid": "2026-09-08T17:20:00",
+    "validityStartDate": "2026-09-08",
+    "validityEndDate": "2026-10-08"
+  },
+  {
+    "saleId": "S003",
+    "customerId": "C003",
+    "packageId": "P004",
+    "amountPaid": 120,
+    "paymentMode": "Credit Card",
+    "dateTimePaid": "2026-09-10T09:30:00",
+    "validityStartDate": "2026-09-10",
+    "validityEndDate": "2026-12-10"
+  },
+  {
+    "saleId": "S004",
+    "customerId": "C001",
+    "packageId": "P005",
+    "amountPaid": 45,
+    "paymentMode": "Debit Card",
+    "dateTimePaid": "2026-09-15T14:00:00",
+    "validityStartDate": "2026-10-01",
+    "validityEndDate": "2026-10-01"
+  },
+  {
+    "saleId": "S005",
+    "customerId": "C004",
+    "packageId": "P001",
+    "amountPaid": 20,
+    "paymentMode": "Cash",
+    "dateTimePaid": "2026-09-17T16:45:00",
+    "validityStartDate": "2026-09-17",
+    "validityEndDate": "2026-10-17"
+  }
+]

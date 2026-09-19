@@ -1,0 +1,29 @@
+[
+  {
+    "instructorId": "I001",
+    "firstName": "Jessica",
+    "lastName": "Anderson",
+    "address": "214 Willow Lane, Tulsa, OK 74134",
+    "phone": "412-555-0101",
+    "email": "jessica.anderson@example.com",
+    "preferredCommunication": "Email"
+  },
+  {
+    "instructorId": "I002",
+    "firstName": "Daniel",
+    "lastName": "Brown",
+    "address": "87 Cedar Drive, Tulsa, OK 74135",
+    "phone": "412-555-0102",
+    "email": "daniel.brown@example.com",
+    "preferredCommunication": "Phone"
+  },
+  {
+    "instructorId": "I003",
+    "firstName": "Amanda",
+    "lastName": "Wilson",
+    "address": "301 Birch Avenue, Tulsa, OK 74137",
+    "phone": "412-555-0103",
+    "email": "amanda.wilson@example.com",
+    "preferredCommunication": "Email"
+  }
+]

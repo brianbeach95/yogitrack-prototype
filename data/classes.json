@@ -1,0 +1,42 @@
+[
+  {
+    "classId": "CL001",
+    "instructorId": "I001",
+    "day": "Monday",
+    "time": "18:00",
+    "classType": "General",
+    "payRate": 35
+  },
+  {
+    "classId": "CL002",
+    "instructorId": "I001",
+    "day": "Wednesday",
+    "time": "18:00",
+    "classType": "General",
+    "payRate": 35
+  },
+  {
+    "classId": "CL003",
+    "instructorId": "I002",
+    "day": "Tuesday",
+    "time": "17:30",
+    "classType": "General",
+    "payRate": 40
+  },
+  {
+    "classId": "CL004",
+    "instructorId": "I002",
+    "day": "Saturday",
+    "time": "10:00",
+    "classType": "Special",
+    "payRate": 50
+  },
+  {
+    "classId": "CL005",
+    "instructorId": "I003",
+    "day": "Thursday",
+    "time": "19:00",
+    "classType": "General",
+    "payRate": 35
+  }
+]
