@@ -1,5 +1,6 @@
 const Customer = require("../models/customerModel.cjs");
 const { formatName, formatPhone, validateEmail } = require("../utils/validationUtils.cjs");
+const { generateNextId } = require("../utils/idUtils.cjs");
 
 exports.search = async (req, res) => {
   try {
@@ -70,17 +71,8 @@ exports.add = async (req, res) => {
       customerId: /^C\d+$/
     }).sort({ customerId: -1 });
 
-    let maxNumber = 0;
 
-    if (lastCustomer) {
-      const match = lastCustomer.customerId.match(/\d+$/);
-
-      if (match) {
-        maxNumber = parseInt(match[0]);
-      }
-    }
-
-    const customerId = `C${String(maxNumber + 1).padStart(3, "0")}`;
+    const customerId = generateNextId(lastCustomer, "customerId", "C");
 
     // Create a new customer document
     const newCustomer = new Customer({
@@ -121,15 +113,7 @@ exports.getNextId = async (req, res) => {
     .sort({ customerId: -1 })
     .limit(1);
 
-  let maxNumber = 1;
-  if (lastCustomer.length > 0) {
-    const lastId = lastCustomer[0].customerId;
-    const match = lastId.match(/\d+$/);
-    if (match) {
-      maxNumber = parseInt(match[0]) + 1;
-    }
-  }
-  const nextId = `C${String(maxNumber).padStart(3, "0")}`;
+  const nextId = generateNextId(lastCustomer, "customerId", "C");
   res.json({ nextId });
 };
 

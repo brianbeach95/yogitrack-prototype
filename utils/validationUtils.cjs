@@ -22,9 +22,26 @@ function validateEmail(email) {
   return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
 }
 
+function validateNonNegativeNumber(value) {
+    return !isNaN(value) && Number(value) >= 0;
+}
+
+function validateDateRange(startDate, endDate) {
+    const start = new Date(startDate);
+    const end = new Date(endDate);
+
+    if (isNaN(start.getTime()) || isNaN(end.getTime())) {
+        return false;
+    }
+
+    return end >= start;
+}
+
 module.exports = {
   formatName,
   formatPhone,
-  validateEmail
+  validateEmail,
+  validateNonNegativeNumber,
+  validateDateRange
 };
 
