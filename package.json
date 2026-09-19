@@ -1,0 +1,29 @@
+{
+  "name": "yogitrack-prototype",
+  "version": "1.0.0",
+  "description": "",
+  "homepage": "https://github.com/brianbeach95/yogitrack-prototype#readme",
+  "bugs": {
+    "url": "https://github.com/brianbeach95/yogitrack-prototype/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/brianbeach95/yogitrack-prototype.git"
+  },
+  "license": "ISC",
+  "author": "",
+  "type": "commonjs",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node yogiserver.cjs"
+  },
+  "dependencies": {
+    "express": "^5.2.1",
+    "heroku": "^11.10.0",
+    "mongodb": "^7.6.0",
+    "mongoose": "^9.10.1",
+    "mongoose-int32": "^0.6.0",
+    "mongosh": "^2.12.0"
+  }
+}
