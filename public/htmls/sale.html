@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>YogiTrack • Record Sale</title>
+  <link rel="stylesheet" href="../css/style.css">
+</head>
+<body class="layout--sidebar">
+
+  <aside class="sidebar">
+    <a class="logo-wrap" href="dashboard.html">
+      <img src="../images/Logo.png" alt="YogiTrack Logo" class="logo">
+    </a>
+
+    <nav class="nav">
+      <a href="instructor.html">Instructors</a>
+      <a href="package.html">Packages</a>
+      <a href="class.html">Class Schedule</a>
+      <a href="customer.html">Customers</a>
+      <a href="#">Check-ins</a>
+      <a href="../index.html">Log Out</a>
+    </nav>
+  </aside>
+
+  <main class="layout--center">
+    <form class="card" id="saleForm">
+      <h2>Record Sale</h2>
+
+      <label>Sale ID
+        <input
+          type="text"
+          name="saleId"
+          id="saleId"
+          readonly
+        >
+      </label>
+
+      <label>Customer
+        <select
+          name="customerId"
+          id="customerId"
+          class="form-input"
+          required
+        >
+          <option value="">-- Select Customer --</option>
+        </select>
+      </label>
+
+      <label>Package
+        <select
+          name="packageId"
+          id="packageId"
+          class="form-input"
+          required
+        >
+          <option value="">-- Select Package --</option>
+        </select>
+      </label>
+
+      <div class="grid-2">
+        <label>Package Price
+          <input
+            type="number"
+            id="packagePrice"
+            readonly
+          >
+        </label>
+
+        <label>Amount Paid
+          <input
+            type="number"
+            name="amountPaid"
+            id="amountPaid"
+            min="0"
+            step="0.01"
+            required
+          >
+        </label>
+      </div>
+
+      <div class="grid-2">
+        <label>Payment Mode
+          <select
+            name="paymentMode"
+            id="paymentMode"
+            class="form-input"
+            required
+          >
+            <option value="">-- Select Payment Mode --</option>
+            <option value="Cash">Cash</option>
+            <option value="Credit Card">Credit Card</option>
+            <option value="Debit Card">Debit Card</option>
+          </select>
+        </label>
+
+        <label>Date/Time Paid
+          <input
+            type="datetime-local"
+            name="dateTimePaid"
+            id="dateTimePaid"
+            required
+          >
+        </label>
+      </div>
+
+      <div class="grid-2">
+        <label>Validity Start Date
+          <input
+            type="date"
+            name="validityStartDate"
+            id="validityStartDate"
+            required
+          >
+        </label>
+
+        <label>Validity End Date
+          <input
+            type="date"
+            name="validityEndDate"
+            id="validityEndDate"
+            required
+          >
+        </label>
+      </div>
+
+      <div class="button-row">
+        <button type="button" class="btn btn--primary" id="saveBtn">
+          Save
+        </button>
+
+        <button type="button" class="btn" id="clearBtn">
+          Clear
+        </button>
+      </div>
+
+    </form>
+  </main>
+
+  <script src="../js/sale.js"></script>
+</body>
+</html>
