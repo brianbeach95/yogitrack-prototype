@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>YogiTrack • Class Schedule</title>
+  <link rel="stylesheet" href="../css/style.css">
+</head>
+<body class="layout--sidebar">
+  <!-- Re-use the same sidebar -->
+  <aside class="sidebar">
+    <a class="logo-wrap" href="dashboard.html">
+      <img src="../images/Logo.png" alt="YogaTrack Logo" class="logo">
+    </a>
+    <nav class="nav">
+        <a href="instructor.html">Instructors</a>
+        <a href="package.html">Packages</a>
+        <a href="class.html">Class Schedule</a>
+        <a href="customer.html">Customers</a>
+        <a href="#">Check-ins</a>
+        <a href="../index.html">Log Out</a>
+    </nav>
+  </aside>
+
+<!-- Class Form-->
+<main class="layout--center">
+    <form class="card" id="classForm">
+
+        <h2>Class Details</h2>
+
+        <div id="classIdSearchSelection">
+            <label for="classIdSelect">Class ID
+                <select
+                    name="classId"
+                    id="classIdSelect"
+                    class="form-input"
+                >
+                    <option value=""> -- Select Class Id --</option>
+                </select>
+            </label>
+        </div>
+
+        <div id="classIdAddSelection" style="display: none;"> 
+            <label>Class ID
+                <input
+                    id="classIdText"
+                    type="text"
+                    name="classId"
+                    readonly
+                >
+            </label>
+        </div>
+
+        <div class="grid-2">
+
+            <label>Instructor
+                <select
+                    name="instructorId"
+                    id="instructorId"
+                    class="form-input"
+                    required
+                >
+                    <option value=""> -- Select Instructor --</option>
+                </select>
+            </label>
+
+            <label>Day
+                <select
+                    name="day"
+                    id="day"
+                    class="form-input"
+                    required
+                >
+                    <option value=""> -- Select Day --</option>
+                    <option value="Monday">Monday</option>
+                    <option value="Tuesday">Tuesday</option>
+                    <option value="Wednesday">Wednesday</option>
+                    <option value="Thursday">Thursday</option>
+                    <option value="Friday">Friday</option>
+                    <option value="Saturday">Saturday</option>
+                    <option value="Sunday">Sunday</option>
+                </select>
+            </label>
+
+        </div>
+                <div class="grid-2">
+
+            <label>Time
+                <input
+                    type="time"
+                    name="time"
+                    id="time"
+                    required
+                >
+            </label>
+
+            <label>Class Type
+                <select
+                    name="classType"
+                    id="classType"
+                    class="form-input"
+                    required
+                >
+                    <option value=""> -- Select Class Type --</option>
+                    <option value="General">General</option>
+                    <option value="Special">Special</option>
+                </select>
+            </label>
+
+        </div>
+            <label>Pay Rate
+            <input type="number" name="payRate" id="payRate" min="0" step="0.01" required >
+        </label>
+
+        <div class="form-actions">
+            <button type="button" class="btn btn--primary" id="searchBtn">Search</button>
+            <button type="button" class="btn" id="addBtn">Add </button>
+            <button type="button" class="btn" id="saveBtn">Save</button>
+            <button type="button" class="btn" id="clearBtn">Clear</button>
+        </div>
+
+    </form>
+</main>
+
+<script src="../js/class.js"></script>
+</body>
+</html>
