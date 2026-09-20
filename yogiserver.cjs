@@ -10,6 +10,7 @@ app.use("/api/customer", require("./routes/customerRoutes.cjs"));
 app.use("/api/package", require("./routes/packageRoutes.cjs"));
 app.use("/api/class", require("./routes/classRoutes.cjs"));
 app.use("/api/sale", require("./routes/saleRoutes.cjs"));
+app.use("/api/attendance", require("./routes/attendanceRoutes.cjs"));
 
 
 
