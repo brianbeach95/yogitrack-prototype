@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>YogiTrack • Reports</title>
+  <link rel="stylesheet" href="../css/style.css">
+</head>
+
+<body class="layout--sidebar">
+
+  <aside class="sidebar">
+    <a class="logo-wrap" href="dashboard.html">
+      <img src="../images/Logo.png" alt="YogiTrack Logo" class="logo">
+    </a>
+
+    <nav class="nav">
+      <a href="instructor.html">Instructors</a>
+      <a href="package.html">Packages</a>
+      <a href="class.html">Classes</a>
+      <a href="schedule.html">Class Schedule</a>
+      <a href="customer.html">Customers</a>
+      <a href="sale.html">Sales</a>
+      <a href="attendance.html">Check-ins</a>
+      <a href="viewAttendance.html">View Attendance</a>
+      <a href="reports.html">Reports</a>
+      <a href="../index.html">Log Out</a>
+    </nav>
+  </aside>
+
+  <main class="layout--center">
+
+    <div class="card card--wide">
+
+      <h2 class="text--center">Reports</h2>
+
+      <label>Report Type
+        <select
+          id="reportType"
+          class="styled-select"
+        >
+          <option value="">-- Select Report --</option>
+          <option value="studio">Studio Performance Report</option>
+          <option value="instructor">Instructor Performance Report</option>
+          <option value="customer">Customer Attendance Report</option>
+          <option value="class">Class Attendance Report</option>
+          <option value="customerPackages">Customer Package Report</option>
+        </select>
+      </label>
+
+      <div id="reportContent">
+        <p class="text--center">
+          Select a report to view results.
+        </p>
+      </div>
+
+      <div class="btn-row">
+        <a href="dashboard.html" class="btn">Exit</a>
+      </div>
+
+    </div>
+
+  </main>
+
+  <script src="../js/reports.js"></script>
+
+</body>
+</html>

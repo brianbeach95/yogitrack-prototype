@@ -13,7 +13,7 @@
       <img src="../images/Logo.png" alt="YogiTrack Logo" class="logo">
     </a>
 
-  <nav class="nav">
+    <nav class="nav">
       <a href="instructor.html">Instructors</a>
       <a href="package.html">Packages</a>
       <a href="class.html">Classes</a>
@@ -21,9 +21,10 @@
       <a href="customer.html">Customers</a>
       <a href="sale.html">Sales</a>
       <a href="attendance.html">Check-ins</a>
+      <a href="viewAttendance.html">View Attendance</a>
       <a href="reports.html">Reports</a>
       <a href="../index.html">Log Out</a>
-  </nav>
+    </nav>
   </aside>
 
   <main class="layout--center">
@@ -39,6 +40,16 @@
           readonly
         >
       </label>
+      <label>Instructor
+        <select
+          name="instructorId"
+          id="instructorId"
+          class="form-input"
+          required
+        >
+          <option value="">-- Select Instructor --</option>
+        </select>
+      </label>
 
       <label>Class
         <select
@@ -46,8 +57,9 @@
           id="classId"
           class="form-input"
           required
+          disabled
         >
-          <option value="">-- Select Class --</option>
+          <option value="">-- Select Instructor First --</option>
         </select>
       </label>
 

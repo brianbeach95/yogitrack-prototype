@@ -5,5 +5,6 @@ const attendanceController =
 
 router.get("/getNextId", attendanceController.getNextId);
 router.post("/add", attendanceController.add);
+router.get("/getAttendance", attendanceController.getAttendance);
 
 module.exports = router;

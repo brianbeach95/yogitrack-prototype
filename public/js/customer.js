@@ -89,6 +89,8 @@ function setFormForSearch() {
   document.getElementById("customerIdLabel").style.display = "block";
   document.getElementById("customerIdAddSelection").style.display = "none";
   document.getElementById("customerIdText").value = "";
+
+  document.getElementById("classBalanceLabel").style.display = "block";
 }
 
 
@@ -185,6 +187,7 @@ function setFormForAdd() {
   document.getElementById("customerIdAddSelection").style.display = "block";
   document.getElementById("customerIdText").value = "";
   document.getElementById("customerForm").reset()
+  document.getElementById("classBalanceLabel").style.display = "none";
 }
 
 

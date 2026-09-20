@@ -174,3 +174,27 @@ select.form-input {
     grid-template-columns: 3fr 1fr;
     gap: 1rem;
 }
+
+/*styles for tables*/
+.data-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 1.5rem;
+}
+
+.data-table th,
+.data-table td {
+  padding: .75rem;
+  text-align: left;
+  border-bottom: 1px solid #ddd;
+}
+
+.data-table th {
+  background: #bee6e0;
+  color: #05713d;
+  font-weight: 600;
+}
+
+.data-table tbody tr:hover {
+  background: #f5f8f8;
+}

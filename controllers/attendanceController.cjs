@@ -149,14 +149,13 @@ exports.add = async (req, res) => {
             }
         }
 
-        //don't allow if no class balance
-        if (!hasUnlimitedPackage && customer.classBalance <= 0) {
-            return res.status(400).json({
-                message:
-                    "Customer has no remaining class balance. Please purchase a new package before checking in."
+        if (!hasUnlimitedPackage && customer.classBalance <= 0 && !req.body.allowNegativeBalance ) {
+            return res.status(409).json({
+                message: "Customer has no remaining class balance. Continue with check-in?",
+                requiresConfirmation: true
             });
         }
-
+        
         // Generate Attendance ID
         const lastAttendance = await Attendance.find({
             attendanceId: /^A\d+$/

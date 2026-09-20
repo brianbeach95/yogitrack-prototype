@@ -1,7 +1,8 @@
 document.addEventListener("DOMContentLoaded", () => {
     initAttendanceId();
-    initClassDropdown();
+    initInstructorDropdown();
     initCustomerDropdown();
+    addInstructorDropdownListener();
     addCustomerDropdownListener();
     initAttendanceDateTime();
 });
@@ -23,7 +24,7 @@ async function initAttendanceId() {
     }
 }
 
-async function initClassDropdown() {
+async function initClassDropdown(instructorId) {
     const select = document.getElementById("classId");
 
     select.innerHTML = '<option value="">-- Select Class --</option>';
@@ -37,13 +38,18 @@ async function initClassDropdown() {
 
         const classes = await response.json();
 
-        classes.forEach((classItem) => {
+        const instructorClasses = classes.filter(
+            (classItem) =>
+                classItem.instructorId === instructorId
+        );
+
+        instructorClasses.forEach((classItem) => {
             const option = document.createElement("option");
 
             option.value = classItem.classId;
 
             option.textContent =
-                `${classItem.classId}: ${classItem.day} ${classItem.time} - ${classItem.instructorId}`;
+                `${classItem.classId}: ${classItem.day} ${classItem.time}`;
 
             select.appendChild(option);
         });
@@ -51,6 +57,61 @@ async function initClassDropdown() {
     } catch (error) {
         console.error("Failed to load classes:", error);
     }
+}
+
+async function initInstructorDropdown() {
+    const select = document.getElementById("instructorId");
+
+    select.innerHTML = '<option value="">-- Select Instructor --</option>';
+
+    try {
+        const response = await fetch("/api/instructor/getInstructorIds");
+
+        if (!response.ok) {
+            throw new Error("Failed to load instructors");
+        }
+
+        const instructors = await response.json();
+
+        instructors.forEach((instructor) => {
+            const option = document.createElement("option");
+
+            option.value = instructor.instructorId;
+
+            option.textContent =
+                `${instructor.instructorId}: ` +
+                `${instructor.firstName} ${instructor.lastName}`;
+
+            select.appendChild(option);
+        });
+
+    } catch (error) {
+        console.error("Failed to load instructors:", error);
+    }
+}
+
+function addInstructorDropdownListener() {
+    const instructorSelect =
+        document.getElementById("instructorId");
+
+    const classSelect =
+        document.getElementById("classId");
+
+    instructorSelect.addEventListener("change", async () => {
+        const instructorId = instructorSelect.value;
+
+        if (!instructorId) {
+            classSelect.innerHTML =
+                '<option value="">-- Select Instructor First --</option>';
+
+            classSelect.disabled = true;
+            return;
+        }
+
+        classSelect.disabled = false;
+
+        await initClassDropdown(instructorId);
+    });
 }
 
 async function initCustomerDropdown() {
@@ -139,7 +200,7 @@ document.getElementById("checkInBtn").addEventListener("click", async () => {
     };
 
     try {
-        const response = await fetch("/api/attendance/add", {
+        let response = await fetch("/api/attendance/add", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
@@ -147,7 +208,27 @@ document.getElementById("checkInBtn").addEventListener("click", async () => {
             body: JSON.stringify(attendanceData)
         });
 
-        const result = await response.json();
+        let result = await response.json();
+
+        if (response.status === 409 && result.requiresConfirmation ) {
+            const continueCheckIn = confirm(result.message);
+
+            if (!continueCheckIn) {
+                return;
+            }
+
+            attendanceData.allowNegativeBalance = true;
+
+            response = await fetch("/api/attendance/add", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(attendanceData)
+            });
+
+            result = await response.json();
+        }
 
         if (!response.ok) {
             throw new Error(result.message);
@@ -184,8 +265,10 @@ document.getElementById("clearBtn").addEventListener("click", () => {
     const form = document.getElementById("attendanceForm");
 
     form.reset();
-
     document.getElementById("classBalance").value = "";
+    const classSelect = document.getElementById("classId");
+    classSelect.innerHTML = '<option value="">-- Select Instructor First --</option>';
+    classSelect.disabled = true;
 
     initAttendanceId();
     initAttendanceDateTime();

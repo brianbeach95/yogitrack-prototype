@@ -11,6 +11,7 @@ app.use("/api/package", require("./routes/packageRoutes.cjs"));
 app.use("/api/class", require("./routes/classRoutes.cjs"));
 app.use("/api/sale", require("./routes/saleRoutes.cjs"));
 app.use("/api/attendance", require("./routes/attendanceRoutes.cjs"));
+app.use("/api/report", require("./routes/reportRoutes.cjs"));
 
 
 
