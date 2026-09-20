@@ -104,3 +104,105 @@ exports.add = async (req, res) => {
   }
 };
 
+
+//update functionality
+exports.updatePackage = async (req, res) => {
+  try {
+    const {
+      packageId,
+      packageName,
+      packageCategory,
+      numberOfClasses,
+      classType,
+      startDate,
+      endDate,
+      price
+    } = req.body;
+
+    if (
+      !packageId ||
+      !packageName ||
+      !packageCategory ||
+      !numberOfClasses ||
+      !classType ||
+      !startDate ||
+      !endDate ||
+      price === undefined
+    ) {
+      return res.status(400).json({message: "Missing required fields"});
+    }
+
+    if (!validateNonNegativeNumber(price)) {
+      return res.status(400).json({
+        message: "Price must be a non-negative number"
+      });
+    }
+
+    if (!validateDateRange(startDate, endDate)) {
+      return res.status(400).json({
+        message: "End date must be on or after start date"
+      });
+    }
+
+    const updatedPackage = await Package.findOneAndUpdate(
+      { packageId },
+      {
+        packageName,
+        packageCategory,
+        numberOfClasses,
+        classType,
+        startDate,
+        endDate,
+        price
+      },
+      { returnDocument: "after" }
+    );
+
+    if (!updatedPackage) {
+      return res.status(404).json({
+        message: "Package not found"
+      });
+    }
+
+    res.json({
+      message: "Package updated successfully",
+      package: updatedPackage
+    });
+
+  } catch (err) {
+    console.error("Error updating package:", err.message);
+
+    res.status(500).json({
+      message: "Failed to update package",
+      error: err.message
+    });
+  }
+};
+
+//delete functionality
+exports.deletePackage = async (req, res) => {
+  try {
+    const { packageId } = req.query;
+
+    const result = await Package.findOneAndDelete({
+      packageId
+    });
+
+    if (!result) {
+      return res.status(404).json({
+        error: "Package not found"
+      });
+    }
+
+    res.json({
+      message: "Package deleted",
+      packageId
+    });
+
+  } catch (err) {
+    res.status(500).json({
+      error: err.message
+    });
+  }
+};
+

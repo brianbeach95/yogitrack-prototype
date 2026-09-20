@@ -201,3 +201,30 @@ exports.add = async (req, res) => {
         });
     }
 };
+
+
+//get attendance records
+exports.getAttendance = async (req, res) => {
+    try {
+        const attendance = await Attendance.find(
+            {},
+            {
+                attendanceId: 1,
+                classId: 1,
+                customerId: 1,
+                attendanceDateTime: 1,
+                _id: 0
+            }
+        ).sort({ attendanceDateTime: -1 });
+
+        res.json(attendance);
+
+    } catch (err) {
+        console.error("Error loading attendance:", err.message);
+
+        res.status(500).json({
+            message: "Failed to load attendance",
+            error: err.message
+        });
+    }
+};

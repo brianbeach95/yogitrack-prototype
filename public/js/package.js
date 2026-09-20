@@ -171,3 +171,96 @@ function clearPackageForm() {
     document.getElementById("packageForm").reset();
     setFormForSearch();
 }
+
+
+//update functionality
+document.getElementById("updateBtn").addEventListener("click", async () => {
+    const form = document.getElementById("packageForm");
+    const select = document.getElementById("packageIdSelect");
+
+    const packageId = select.value;
+
+    if (!packageId) {
+        alert("Please select a package to update.");
+        return;
+    }
+
+    if (!form.checkValidity()) {
+        alert("Please complete all required fields.");
+        return;
+    }
+
+    const packageData = {
+        packageId: packageId,
+        packageName: form.packageName.value.trim(),
+        packageCategory: form.packageCategory.value,
+        numberOfClasses: form.numberOfClasses.value,
+        classType: form.classType.value,
+        startDate: form.startDate.value,
+        endDate: form.endDate.value,
+        price: form.price.value
+    };
+
+    try {
+        const response = await fetch("/api/package/updatePackage", {
+            method: "PUT",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(packageData)
+        });
+
+        const result = await response.json();
+
+        if (!response.ok) {
+            throw new Error(
+                result.message || "Package update failed"
+            );
+        }
+
+        alert(`Package ${packageId} successfully updated`);
+
+        clearPackageForm();
+        initPackageDropdown();
+
+    } catch (error) {
+        alert("Error: " + error.message);
+    }
+});
+
+
+//Delete Functionality
+document.getElementById("deleteBtn").addEventListener("click", async () => {
+    const select = document.getElementById("packageIdSelect");
+    const packageId = select.value;
+
+    if (!packageId) {
+        alert("Please select a package to delete.");
+        return;
+    }
+
+    try {
+        const response = await fetch(
+            `/api/package/deletePackage?packageId=${packageId}`,
+            {
+                method: "DELETE"
+            }
+        );
+
+        const result = await response.json();
+
+        if (!response.ok) {
+            throw new Error(
+                result.message || "Package delete failed"
+            );
+        }
+
+        alert(`Package ${packageId} successfully deleted`);
+
+        clearPackageForm();
+        initPackageDropdown();
+
+    } catch (error) {
+        alert("Error: " + error.message);
+    }
+});

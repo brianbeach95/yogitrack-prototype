@@ -205,3 +205,96 @@ document.getElementById("phone").addEventListener("input", function () {
         this.value = digits;
     }
 });
+
+//update button logic
+document.getElementById("updateBtn").addEventListener("click", async () => {
+  const form = document.getElementById("customerForm");
+  const select = document.getElementById("customerIdSelect");
+
+  const customerId = select.value;
+
+  if (!customerId) {
+    alert("Please select a customer to update.");
+    return;
+  }
+
+  if (!form.checkValidity()) {
+    alert("Please complete all required fields.");
+    return;
+  }
+
+  const customerData = {
+    customerId,
+    firstName: form.firstName.value.trim(),
+    lastName: form.lastName.value.trim(),
+    address: form.address.value.trim(),
+    phone: form.phone.value.trim(),
+    email: form.email.value.trim(),
+    preferredCommunication:
+      form.pref[0].checked ? "Phone" : "Email"
+  };
+
+  try {
+    const response = await fetch(
+      "/api/customer/updateCustomer",
+      {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify(customerData)
+      }
+    );
+
+    const result = await response.json();
+
+    if (!response.ok) {
+      throw new Error(
+        result.message || "Customer update failed"
+      );
+    }
+
+    alert(`Customer ${customerId} successfully updated`);
+
+    clearCustomerForm();
+    setFormForSearch();
+    initCustomerDropdown();
+
+  } catch (err) {
+    alert("Error: " + err.message);
+  }
+});
+
+//delete button logic
+document.getElementById("deleteBtn").addEventListener("click", async () => {
+  const select = document.getElementById("customerIdSelect");
+  const customerId = select.value;
+
+  if (!customerId) {
+    alert("Please select a customer to delete.");
+    return;
+  }
+
+  try {
+    const response = await fetch(
+      `/api/customer/deleteCustomer?customerId=${customerId}`,
+      {
+        method: "DELETE"
+      }
+    );
+
+    if (!response.ok) {
+      throw new Error("Customer delete failed");
+    }
+
+    alert(
+      `Customer with id ${customerId} successfully deleted`
+    );
+
+    clearCustomerForm();
+    initCustomerDropdown();
+
+  } catch (err) {
+    alert("Error: " + err.message);
+  }
+});

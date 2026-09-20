@@ -117,6 +117,7 @@ exports.getNextId = async (req, res) => {
   res.json({ nextId });
 };
 
+//delete
 exports.deleteCustomer = async (req, res) => {
   try {
      const {customerId} = req.query;
@@ -127,5 +128,58 @@ exports.deleteCustomer = async (req, res) => {
     res.json({ message: "Customer deleted", customerId });
   } catch (err) {
     res.status(500).json({ error: err.message });
+  }
+};
+
+//update
+exports.updateCustomer = async (req, res) => {
+  try {
+    const {
+      customerId,
+      firstName,
+      lastName,
+      email,
+      phone,
+      address,
+      preferredCommunication
+    } = req.body;
+
+    if (!customerId || !firstName || !lastName || !email || !phone) {
+      return res.status(400).json({
+        message: "Missing required fields"
+      });
+    }
+
+    const updatedCustomer = await Customer.findOneAndUpdate(
+      { customerId },
+      {
+        firstName,
+        lastName,
+        email,
+        phone,
+        address,
+        preferredCommunication
+      },
+      { returnDocument: "after" }
+    );
+
+    if (!updatedCustomer) {
+      return res.status(404).json({
+        message: "Customer not found"
+      });
+    }
+
+    res.json({
+      message: "Customer updated successfully",
+      customer: updatedCustomer
+    });
+
+  } catch (err) {
+    console.error("Error updating customer:", err.message);
+
+    res.status(500).json({
+      message: "Failed to update customer",
+      error: err.message
+    });
   }
 };

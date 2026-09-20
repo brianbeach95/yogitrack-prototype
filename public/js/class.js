@@ -241,3 +241,119 @@ document.getElementById("clearBtn").addEventListener("click", () => {
         setFormForSearch();
     }
 });
+
+
+//update functionality
+document.getElementById("updateBtn").addEventListener("click", async () => {
+    const form = document.getElementById("classForm");
+    const select = document.getElementById("classIdSelect");
+
+    const classId = select.value;
+
+    if (!classId) {
+        alert("Please select a class to update.");
+        return;
+    }
+
+    // put into update mode
+    if (formMode !== "update") {
+        formMode = "update";
+        setClassFieldsEditable(true);
+
+        alert("Class fields are now editable. Make your changes and click Update again to save.");
+        return;
+    }
+
+    // saves changes
+    if (!form.checkValidity()) {
+        alert("Please fill in all required fields.");
+        return;
+    }
+
+    const classData = {
+        classId: classId,
+        instructorId: form.instructorId.value,
+        day: form.day.value,
+        time: form.time.value,
+        classType: form.classType.value,
+        payRate: form.payRate.value
+    };
+
+    try {
+        const response = await fetch("/api/class/updateClass", {
+            method: "PUT",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(classData)
+        });
+
+        const result = await response.json();
+
+        if (!response.ok) {
+            if (response.status === 409 && result.alternatives) {
+                const alternatives = result.alternatives
+                    .map(time => {
+                        const [hours, minutes] = time.split(":");
+                        const date = new Date();
+                        date.setHours(hours, minutes);
+
+                        return date.toLocaleTimeString([], {
+                            hour: "numeric",
+                            minute: "2-digit"
+                        });
+                    })
+                    .join(", ");
+
+                alert(`${result.message}\n\nAvailable times: ${alternatives}`);
+                return;
+            }
+
+            throw new Error(result.message || "Class update failed");
+        }
+
+        alert(`Class ${classId} successfully updated`);
+
+        setFormForSearch();
+        initClassDropdown();
+
+    } catch (error) {
+        alert("Error: " + error.message);
+    }
+});
+
+//delete logic
+document.getElementById("deleteBtn").addEventListener("click", async () => {
+    const select = document.getElementById("classIdSelect");
+    const classId = select.value;
+
+    if (!classId) {
+        alert("Please select a class to delete.");
+        return;
+    }
+
+    try {
+        const response = await fetch(
+            `/api/class/deleteClass?classId=${classId}`,
+            {
+                method: "DELETE"
+            }
+        );
+
+        const result = await response.json();
+
+        if (!response.ok) {
+            throw new Error(
+                result.message || "Class delete failed"
+            );
+        }
+
+        alert(`Class ${classId} successfully deleted`);
+
+        setFormForSearch();
+        initClassDropdown();
+
+    } catch (error) {
+        alert("Error: " + error.message);
+    }
+});

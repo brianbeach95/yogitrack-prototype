@@ -109,3 +109,58 @@ exports.deleteInstructor = async (req, res) => {
     res.status(500).json({ error: err.message });
   }
 };
+
+
+//update/modify
+exports.updateInstructor = async (req, res) => {
+  try {
+    const {
+      instructorId,
+      firstName,
+      lastName,
+      email,
+      phone,
+      address,
+      preferredCommunication
+    } = req.body;
+
+    // Basic validation
+    if (!instructorId || !firstName || !lastName || !email || !phone) {
+      return res.status(400).json({
+        message: "Missing required fields"
+      });
+    }
+
+    const updatedInstructor = await Instructor.findOneAndUpdate(
+      { instructorId },
+      {
+        firstName,
+        lastName,
+        email,
+        phone,
+        address,
+        preferredCommunication
+      },
+      { returnDocument: "after" }
+    );
+
+    if (!updatedInstructor) {
+      return res.status(404).json({
+        message: "Instructor not found"
+      });
+    }
+
+    res.json({
+      message: "Instructor updated successfully",
+      instructor: updatedInstructor
+    });
+
+  } catch (err) {
+    console.error("Error updating instructor:", err.message);
+
+    res.status(500).json({
+      message: "Failed to update instructor",
+      error: err.message
+    });
+  }
+};

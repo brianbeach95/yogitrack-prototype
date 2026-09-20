@@ -154,3 +154,60 @@ function setFormForAdd() {
   document.getElementById("instructorIdText").value = "";
   document.getElementById("instructorForm").reset();
 }
+
+
+//update button listener
+document.getElementById("updateBtn").addEventListener("click", async () => {
+    const form = document.getElementById("instructorForm");
+    const select = document.getElementById("instructorIdSelect");
+
+    const instructorId = select.value;
+
+    if (!instructorId) {
+        alert("Please select an instructor to update.");
+        return;
+    }
+
+    if (!form.checkValidity()) {
+        alert("Please complete all required fields.");
+        return;
+    }
+
+    const instructorData = {
+        instructorId: instructorId,
+        firstName: form.firstName.value.trim(),
+        lastName: form.lastName.value.trim(),
+        address: form.address.value.trim(),
+        phone: form.phone.value.trim(),
+        email: form.email.value.trim(),
+        preferredCommunication:
+            form.pref[0].checked ? "Phone" : "Email"
+    };
+
+    try {
+        const response = await fetch("/api/instructor/updateInstructor", {
+            method: "PUT",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(instructorData)
+        });
+
+        const result = await response.json();
+
+        if (!response.ok) {
+            throw new Error(
+                result.message || "Instructor update failed"
+            );
+        }
+
+        alert(`Instructor ${instructorId} successfully updated`);
+
+        clearInstructorForm();
+        setFormForSearch();
+        initInstructorDropdown();
+
+    } catch (err) {
+        alert("Error: " + err.message);
+    }
+});
