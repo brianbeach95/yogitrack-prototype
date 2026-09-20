@@ -161,7 +161,7 @@ document.getElementById("updateBtn").addEventListener("click", async () => {
     const form = document.getElementById("instructorForm");
     const select = document.getElementById("instructorIdSelect");
 
-    const instructorId = select.value;
+    const instructorId = select.value.split(":")[0];
 
     if (!instructorId) {
         alert("Please select an instructor to update.");
@@ -180,9 +180,7 @@ document.getElementById("updateBtn").addEventListener("click", async () => {
         address: form.address.value.trim(),
         phone: form.phone.value.trim(),
         email: form.email.value.trim(),
-        preferredCommunication:
-            form.pref[0].checked ? "Phone" : "Email"
-    };
+        preferredCommunication: form.pref[0].checked ? "Phone" : "Email"};
 
     try {
         const response = await fetch("/api/instructor/updateInstructor", {

@@ -141,7 +141,7 @@ exports.updateInstructor = async (req, res) => {
         address,
         preferredCommunication
       },
-      { returnDocument: "after" }
+      { new: true, runValidators: true }
     );
 
     if (!updatedInstructor) {

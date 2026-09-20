@@ -214,7 +214,7 @@ document.getElementById("updateBtn").addEventListener("click", async () => {
   const form = document.getElementById("customerForm");
   const select = document.getElementById("customerIdSelect");
 
-  const customerId = select.value;
+  const customerId = select.value.split(":")[0];
 
   if (!customerId) {
     alert("Please select a customer to update.");
@@ -271,7 +271,7 @@ document.getElementById("updateBtn").addEventListener("click", async () => {
 //delete button logic
 document.getElementById("deleteBtn").addEventListener("click", async () => {
   const select = document.getElementById("customerIdSelect");
-  const customerId = select.value;
+  const customerId = select.value.split(":")[0];
 
   if (!customerId) {
     alert("Please select a customer to delete.");
