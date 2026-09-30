@@ -49,7 +49,13 @@ exports.getStudioPerformance = async (req, res) => {
 
 exports.getInstructorPerformance = async (req, res) => {
     try {
-        const instructors = await Instructor.find({});
+        let instructorFilter = {};
+
+        if (req.session.user.role === "Instructor") {
+            instructorFilter.instructorId = req.session.user.sourceKey;
+        }
+
+        const instructors = await Instructor.find(instructorFilter);
         const classes = await Class.find({});
         const attendance = await Attendance.find({});
 
@@ -124,7 +130,13 @@ exports.getCustomerAttendance = async (req, res) => {
 
 exports.getClassAttendance = async (req, res) => {
     try {
-        const classes = await Class.find({});
+        let classFilter = {};
+
+        if (req.session.user.role === "Instructor") {
+            classFilter.instructorId = req.session.user.sourceKey;
+        }
+
+        const classes = await Class.find(classFilter);
         const attendance = await Attendance.find({});
 
         const classSummary = classes.map((classItem) => {

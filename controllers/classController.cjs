@@ -14,6 +14,21 @@ exports.getClass = async (req, res) => {
             classId: classId
         });
 
+        if (!classDetail) {
+            return res.status(404).json({
+                message: "Class not found"
+            });
+        }
+
+        if (
+            req.session.user.role === "Instructor" &&
+            classDetail.instructorId !== req.session.user.sourceKey
+        ) {
+            return res.status(403).json({
+                message: "You can only access your own classes"
+            });
+        }
+
         res.json(classDetail);
 
     } catch (e) {
@@ -25,9 +40,21 @@ exports.getClass = async (req, res) => {
 
 exports.getClassIds = async (req, res) => {
     try {
+        let filter = {};
+
+        if (req.session.user.role === "Instructor") {
+            filter.instructorId = req.session.user.sourceKey;
+        }
+
         const classes = await Class.find(
-            {},
-            {classId: 1, instructorId: 1, day: 1, time: 1, _id: 0 }
+            filter,
+            {
+                classId: 1,
+                instructorId: 1,
+                day: 1,
+                time: 1,
+                _id: 0
+            }
         ).sort();
 
         res.json(classes);
@@ -281,8 +308,14 @@ exports.deleteClass = async (req, res) => {
 //get class schedules
 exports.getSchedule = async (req, res) => {
     try {
+        let filter = {};
+
+        if (req.session.user.role === "Instructor") {
+            filter.instructorId = req.session.user.sourceKey;
+        }
+
         const classes = await Class.find(
-            {},
+            filter,
             {
                 classId: 1,
                 instructorId: 1,
@@ -294,6 +327,7 @@ exports.getSchedule = async (req, res) => {
         );
 
         res.json(classes);
+
 
     } catch (err) {
         console.error("Error loading class schedule:", err.message);

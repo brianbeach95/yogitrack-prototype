@@ -19,7 +19,9 @@
     "start": "node yogiserver.cjs"
   },
   "dependencies": {
+    "bcrypt": "^6.0.0",
     "express": "^5.2.1",
+    "express-session": "^1.19.0",
     "heroku": "^11.10.0",
     "mongodb": "^7.6.0",
     "mongoose": "^9.10.1",

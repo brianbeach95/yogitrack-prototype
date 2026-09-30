@@ -49,6 +49,12 @@ exports.add = async (req, res) => {
             });
         }
 
+        if (req.session.user.role === "Instructor" && classItem.instructorId !== req.session.user.sourceKey) {
+            return res.status(403).json({
+                message: "You can only record attendance for your own classes"
+            });
+        }
+
         const customer = await Customer.findOne({ customerId });
 
         if (!customer) {
@@ -205,8 +211,27 @@ exports.add = async (req, res) => {
 //get attendance records
 exports.getAttendance = async (req, res) => {
     try {
+let filter = {};
+
+        if (req.session.user.role === "Instructor") {
+
+            const instructorClasses = await Class.find(
+                {instructorId: req.session.user.sourceKey},
+                {
+                    classId: 1,
+                    _id: 0
+                }
+            );
+
+            const classIds = instructorClasses.map(
+                classItem => classItem.classId
+            );
+
+            filter.classId = {$in: classIds};
+        }
+
         const attendance = await Attendance.find(
-            {},
+            filter,
             {
                 attendanceId: 1,
                 classId: 1,

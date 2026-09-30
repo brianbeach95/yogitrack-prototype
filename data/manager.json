@@ -1,0 +1,18 @@
+[
+  {
+    "managerId": "M001",
+    "firstName": "Rachel",
+    "lastName": "Thompson",
+    "address": "1427 South Lewis Avenue, Tulsa, OK 74104",
+    "phone": "918-555-0201",
+    "email": "rachel.thompson@example.com"
+  },
+  {
+    "managerId": "M002",
+    "firstName": "Michael",
+    "lastName": "Davis",
+    "address": "5821 East 51st Street, Tulsa, OK 74135",
+    "phone": "918-555-0202",
+    "email": "michael.davis@example.com"
+  }
+]
