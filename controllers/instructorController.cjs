@@ -1,4 +1,6 @@
 const Instructor = require("../models/instructorModel.cjs");
+const { generateNextId } = require("../utils/idUtils.cjs");
+const {formatName, formatPhone, validateEmail } = require("../utils/validationUtils.cjs")
 
 exports.search = async (req, res) => {
   try {
@@ -42,18 +44,61 @@ exports.add = async (req, res) => {
     } = req.body;
 
     // Basic validation
-    if (!firstName || !lastName || !email || !phone) {
-      return res.status(400).json({ message: "Missing required fields" });
+    if (!instructorId || !firstName?.trim() || !lastName?.trim() || !email?.trim() || !phone?.trim()) {
+        return res.status(400).json({
+            message: "All instructor fields are required."
+        });
+    }
+
+    if (address.trim().length < 5) {
+        return res.status(400).json({
+            message: "Address must contain at least 5 characters."
+        });
+    }
+
+    if (!validateEmail(email.trim())) {
+        return res.status(400).json({
+            message: "Please enter a valid email address."
+        });
+    }
+
+    const formattedFirstName = formatName(firstName);
+    const formattedLastName = formatName(lastName);
+
+    if (phone.replace(/\D/g, "").length !== 10) {
+      return res.status(400).json({
+          message: "Phone number must contain 10 digits."
+    });
+}
+    const formattedPhone = formatPhone(phone);
+
+    const existingInstructor = await Instructor.findOne({
+        firstName: {
+            $regex: `^${firstName.trim().replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}$`,
+            $options: "i"
+        },
+        lastName: {
+            $regex: `^${lastName.trim().replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}$`,
+            $options: "i"
+        }
+    });
+
+    if (existingInstructor && req.body.confirmDuplicate !== true) {
+        return res.status(409).json({
+            message: "An instructor with this name already exists.",
+            duplicate: true,
+            existingInstructorId: existingInstructor.instructorId
+        });
     }
 
     // Create a new instructor document
     const newInstructor = new Instructor({
       instructorId,
-      firstName,
-      lastName,
-      address,
-      phone,
-      email,
+      firstName: formattedFirstName,
+      lastName: formattedLastName,
+      address: address.trim(),
+      phone: formattedPhone,
+      email: email.trim(),
       preferredCommunication
     });
 
@@ -81,25 +126,32 @@ exports.getInstructorIds = async (req, res) => {
 };
 
 exports.getNextId = async (req, res) => {
-  const lastInstructor = await Instructor.find({})
-    .sort({ instructorId: -1 })
-    .limit(1);
+    try {
+        const lastInstructor = await Instructor.find({
+            instructorId: /^I\d+$/
+        })
+            .sort({ instructorId: -1 })
+            .limit(1);
 
-  let maxNumber = 1;
-  if (lastInstructor.length > 0) {
-    const lastId = lastInstructor[0].instructorId;
-    const match = lastId.match(/\d+$/);
-    if (match) {
-      maxNumber = parseInt(match[0]) + 1;
+        const nextId = generateNextId(
+            lastInstructor,
+            "instructorId",
+            "I"
+        );
+
+        res.json({ nextId });
+
+    } catch (error) {
+        res.status(500).json({
+            message: "Failed to generate instructor ID",
+            error: error.message
+        });
     }
-  }
-  const nextId = `I${maxNumber}`;
-  res.json({ nextId });
 };
 
 exports.deleteInstructor = async (req, res) => {
   try {
-     const {instructorId} = req.query;
+     const { instructorId } = req.body;
      const result = await Instructor.findOneAndDelete({ instructorId });
      if (!result) {
       return res.status(404).json({ error: "Instructor not found" });
@@ -134,11 +186,11 @@ exports.updateInstructor = async (req, res) => {
     const updatedInstructor = await Instructor.findOneAndUpdate(
       { instructorId },
       {
-        firstName,
-        lastName,
-        email,
-        phone,
-        address,
+        firstName: formattedFirstName,
+        lastName: formattedLastName,
+        address: address.trim(),
+        phone: formattedPhone,
+        email: email.trim(),
         preferredCommunication
       },
       { new: true, runValidators: true }

@@ -1,6 +1,8 @@
 const Customer = require("../models/customerModel.cjs");
 const { formatName, formatPhone, validateEmail } = require("../utils/validationUtils.cjs");
 const { generateNextId } = require("../utils/idUtils.cjs");
+const Sale = require("../models/saleModel.cjs");
+const Attendance = require("../models/attendanceModel.cjs");
 
 exports.search = async (req, res) => {
   try {
@@ -25,6 +27,12 @@ exports.getCustomer = async (req, res) => {
     const customerId = req.query.customerId;
     const customerDetail = await Customer.findOne({ customerId: customerId });
 
+    if (!customerDetail) {
+        return res.status(404).json({
+            message: "Customer not found."
+        });
+    }
+
     res.json(customerDetail);
   } catch (e) {
     res.status(400).json({ error: e.message });
@@ -34,30 +42,55 @@ exports.getCustomer = async (req, res) => {
 exports.add = async (req, res) => {
   try {
     const {
+      firstName,
+      lastName,
       email,
       phone,
       address,
       preferredCommunication
     } = req.body;
 
-    const firstName = formatName(req.body.firstName);
-    const lastName = formatName(req.body.lastName);
+    // Basic validation
+    if (!firstName?.trim() || !lastName?.trim() || !email?.trim() || !phone?.trim() || !address?.trim()) {
+        return res.status(400).json({
+            message: "All customer contact fields are required."
+        });
+    }
+
+    if (address.trim().length < 5) {
+        return res.status(400).json({
+            message: "Address must contain at least 5 characters."
+        });
+    }
+
+    if (phone.replace(/\D/g, "").length !== 10) {
+        return res.status(400).json({
+            message: "Phone number must contain 10 digits."
+        });
+    }
+
+    if (!validateEmail(email.trim())) {
+        return res.status(400).json({
+            message: "Please enter a valid email address."
+        });
+    }
+
+    const formattedFirstName = formatName(firstName);
+    const formattedLastName = formatName(lastName);
     const formattedPhone = formatPhone(phone);
 
-    // Basic validation
-    if (!firstName || !lastName || !email || !phone) {
-      return res.status(400).json({ message: "Missing required fields" });
-    }
-
-    if (!validateEmail(email)) {
-      return res.status(400).json({
-        message: "Invalid email address"
-      });
-    }
+    const escapeRegex = (value) =>
+        value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 
     const existingCustomer = await Customer.findOne({
-        firstName: firstName,
-        lastName: lastName
+        firstName: {
+            $regex: `^${escapeRegex(formattedFirstName)}$`,
+            $options: "i"
+        },
+        lastName: {
+            $regex: `^${escapeRegex(formattedLastName)}$`,
+            $options: "i"
+        }
     });
 
     if (existingCustomer  && !req.body.allowDuplicate) {
@@ -67,22 +100,24 @@ exports.add = async (req, res) => {
         })
     };
 
-    const lastCustomer = await Customer.findOne({
-      customerId: /^C\d+$/
-    }).sort({ customerId: -1 });
-
+    const lastCustomer = await Customer.find({
+        customerId: /^C\d+$/
+    })
+    .sort({ customerId: -1 })
+    .limit(1);
 
     const customerId = generateNextId(lastCustomer, "customerId", "C");
 
     // Create a new customer document
     const newCustomer = new Customer({
       customerId,
-      firstName,
-      lastName,
-      address,
+      firstName: formattedFirstName,
+      lastName: formattedLastName,
+      address: address.trim(),
       phone: formattedPhone,
-      email,
-      preferredCommunication
+      email: email.trim(),
+      preferredCommunication,
+      classBalance: 0
     });
 
     // Save to database
@@ -100,7 +135,7 @@ exports.getCustomerIds = async (req, res) => {
     const customers = await Customer.find(
       {},
       { customerId: 1, firstName: 1, lastName: 1, _id: 0 }
-    ).sort();
+    ).sort({ customerId: 1 });
 
     res.json(customers);
   } catch (e) {
@@ -121,6 +156,23 @@ exports.getNextId = async (req, res) => {
 exports.deleteCustomer = async (req, res) => {
   try {
      const {customerId} = req.query;
+     if (!customerId) {
+        return res.status(400).json({
+            message: "Customer ID is required."
+        });
+    }
+
+    const [existingSale, existingAttendance] = await Promise.all([
+        Sale.exists({ customerId }),
+        Attendance.exists({ customerId })
+    ]);
+
+    if (existingSale || existingAttendance) {
+        return res.status(409).json({
+            message:
+                "Cannot delete this customer because they have existing sales or attendance records."
+        });
+    }
      const result = await Customer.findOneAndDelete({ customerId });
      if (!result) {
       return res.status(404).json({ error: "Customer not found" });
@@ -144,23 +196,54 @@ exports.updateCustomer = async (req, res) => {
       preferredCommunication
     } = req.body;
 
-    if (!customerId || !firstName || !lastName || !email || !phone) {
-      return res.status(400).json({
-        message: "Missing required fields"
-      });
+    if (!customerId?.trim()) {
+        return res.status(400).json({
+            message: "Customer ID is required."
+        });
     }
+
+      if (!firstName?.trim() || !lastName?.trim() || !email?.trim() || !phone?.trim() || !address?.trim()) {
+        return res.status(400).json({
+            message: "All customer contact fields are required."
+        });
+    }
+
+    if (address.trim().length < 5) {
+        return res.status(400).json({
+            message: "Address must contain at least 5 characters."
+        });
+    }
+
+    if (phone.replace(/\D/g, "").length !== 10) {
+        return res.status(400).json({
+            message: "Phone number must contain 10 digits."
+        });
+    }
+
+    if (!validateEmail(email.trim())) {
+        return res.status(400).json({
+            message: "Please enter a valid email address."
+        });
+    }
+
+    const formattedFirstName = formatName(firstName);
+    const formattedLastName = formatName(lastName);
+    const formattedPhone = formatPhone(phone);
 
     const updatedCustomer = await Customer.findOneAndUpdate(
       { customerId },
       {
-        firstName,
-        lastName,
-        email,
-        phone,
-        address,
+        firstName: formattedFirstName,
+        lastName: formattedLastName,
+        address: address.trim(),
+        phone: formattedPhone,
+        email: email.trim(),
         preferredCommunication
       },
-      { returnDocument: "after" }
+      { 
+        returnDocument: "after",
+        runValidators: true
+      }
     );
 
     if (!updatedCustomer) {

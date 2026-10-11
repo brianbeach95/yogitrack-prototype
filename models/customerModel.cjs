@@ -2,7 +2,11 @@ const mongoose = require("mongoose");
 require("../config/mongodbconn.cjs");
 
 const customerModel = new mongoose.Schema({
-    customerId: String,
+    customerId: {
+        type: String,
+        required: true,
+        unique: true
+    },
     firstName: String,
     lastName: String,
     email: String,

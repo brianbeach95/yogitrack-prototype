@@ -1,0 +1,427 @@
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+}
+
+/* LOGIN PAGE */
+
+.login-page {
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    background:
+        linear-gradient(
+            135deg,
+            #e8eee7,
+            #f7f4ed
+        );
+
+    padding: 24px;
+}
+
+.login-card {
+    width: 100%;
+    max-width: 420px;
+
+    background-color: #ffffff;
+
+    padding: 42px;
+
+    border-radius: 16px;
+
+    box-shadow:
+        0 10px 35px rgba(45, 60, 50, 0.12);
+}
+
+/* BRANDING */
+
+.login-brand {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.login-logo {
+    width: 150px;
+    height: auto;
+    margin-bottom: 12px;
+}
+
+.login-brand h1 {
+    margin: 0 0 8px;
+
+    color: #34473c;
+
+    font-size: 28px;
+    font-weight: 600;
+}
+
+.login-brand p {
+    margin: 0;
+
+    color: #758078;
+
+    font-size: 14px;
+}
+
+/* FORM */
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-group label {
+    display: block;
+
+    margin-bottom: 7px;
+
+    color: #46554b;
+
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.form-group input {
+    width: 100%;
+
+    padding: 12px 14px;
+
+    background-color: #fafbf9;
+    color: #2f3a34;
+
+    border: 1px solid #cfd8d1;
+    border-radius: 8px;
+
+    font-size: 16px;
+
+    outline: none;
+
+    transition:
+        border-color 0.2s,
+        box-shadow 0.2s;
+}
+
+.form-group input:focus {
+    border-color: #718c79;
+
+    box-shadow:
+        0 0 0 3px rgba(113, 140, 121, 0.15);
+}
+
+/* LOGIN BUTTON */
+
+.login-card button {
+    width: 100%;
+
+    margin-top: 5px;
+    padding: 12px;
+
+    background-color: #526f5c;
+    color: white;
+
+    border: none;
+    border-radius: 8px;
+
+    font-size: 16px;
+    font-weight: 600;
+
+    cursor: pointer;
+
+    transition:
+        background-color 0.2s,
+        transform 0.1s;
+}
+
+.login-card button:hover {
+    background-color: #425c4b;
+}
+
+.login-card button:active {
+    transform: translateY(1px);
+}
+
+/* ERROR MESSAGE */
+
+.login-message {
+    padding: 10px;
+
+    background-color: #fff2f0;
+    color: #a4443f;
+
+    border-radius: 6px;
+
+    font-size: 14px;
+    text-align: center;
+}
+
+
+
+/* APPLICATION LAYOUT */
+
+.app-layout {
+    display: flex;
+    min-height: 100vh;
+    background-color: #f4f6f2;
+}
+
+
+
+/* SIDEBAR */
+
+.sidebar {
+    width: 250px;
+    min-width: 250px;
+    min-height: 100vh;
+
+    display: flex;
+    flex-direction: column;
+
+    background-color: #34473c;
+    color: white;
+
+    padding: 25px 18px;
+}
+
+.sidebar-brand {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.sidebar-logo {
+    width: 140px;
+    max-width: 100%;
+    height: auto;
+}
+
+/* NAVIGATION */
+
+.sidebar-nav {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.sidebar-nav a {
+    display: block;
+    padding: 12px 15px;
+
+    color: #e8eee7;
+    text-decoration: none;
+
+    border-radius: 8px;
+    font-size: 15px;
+
+    transition: background-color 0.2s;
+}
+
+.sidebar-nav a:hover {
+    background-color: #526f5c;
+}
+
+.sidebar-nav a.active {
+    background-color: #526f5c;
+    color: #ffffff;
+    font-weight: 600;
+}
+
+/* FOOTER */
+
+.sidebar-footer {
+    margin-top: auto;
+    padding-top: 20px;
+    border-top: 1px solid #526f5c;
+}
+
+.sidebar-footer p {
+    margin: 0 0 5px;
+    font-weight: 600;
+}
+
+.sidebar-footer small {
+    display: block;
+    margin-bottom: 15px;
+    color: #c7d4c9;
+}
+
+.sidebar-footer button {
+    width: 100%;
+    padding: 10px;
+
+    background-color: #526f5c;
+    color: white;
+
+    border: none;
+    border-radius: 8px;
+
+    cursor: pointer;
+    font-size: 14px;
+}
+
+.sidebar-footer button:hover {
+    background-color: #688773;
+}
+
+/* MAIN CONTENT */
+
+.dashboard-content {
+    flex: 1;
+    padding: 45px;
+}
+
+.dashboard-content h1 {
+    color: #34473c;
+    margin-top: 0;
+}
+
+.dashboard-content h2 {
+    color: #526f5c;
+}
+
+
+
+.loading-screen {
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #f4f6f2;
+    color: #34473c;
+    font-size: 20px;
+    font-weight: 600;
+}
+
+
+
+/* schedule */
+
+.schedule-page h1 {
+    color: #34473c;
+    margin-top: 0;
+    margin-bottom: 25px;
+}
+
+.schedule-table {
+    width: 100%;
+    border-collapse: collapse;
+    background-color: white;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 4px 18px rgba(45, 60, 50, 0.07);
+}
+
+.schedule-table th {
+    background-color: #e8eee7;
+    color: #34473c;
+    text-align: left;
+    padding: 16px;
+    font-weight: 600;
+    font-size: 14px;
+}
+
+.schedule-table td {
+    padding: 16px;
+    border-bottom: 1px solid #edf0ec;
+    color: #46554b;
+    font-size: 14px;
+}
+
+.schedule-table tbody tr:hover {
+    background-color: #f7faf6;
+}
+
+.schedule-table tbody tr:last-child td {
+    border-bottom: none;
+}
+
+
+/* instructors */
+
+.instructor-details {
+    background: white;
+    padding: 30px;
+    border-radius: 12px;
+    margin-top: 25px;
+    box-shadow: 0 4px 18px rgba(45, 60, 50, 0.07);
+}
+
+.instructor-details h2 {
+    margin-top: 0;
+    margin-bottom: 25px;
+    color: #34473c;
+}
+
+.instructor-form-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 5px 20px;
+}
+
+.instructors-page select {
+    width: 100%;
+    padding: 12px 14px;
+    border: 1px solid #cfd8d1;
+    border-radius: 8px;
+    background-color: #fafbf9;
+    color: #2f3a34;
+    font-size: 16px;
+}
+
+@media (max-width: 750px) {
+    .instructor-form-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+.primary-button {
+    background-color: #526f5c;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    padding: 12px 22px;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.primary-button:hover {
+    background-color: #425c4b;
+}
+
+.success-message {
+    margin-top: 15px;
+    color: #39704a;
+    font-weight: 600;
+}
+
+
+.danger-button {
+    background-color: #a94f4f;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    padding: 12px 22px;
+    margin-left: 10px;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.danger-button:hover {
+    background-color: #8f3f3f;
+}
+
+
+.form-actions {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+    margin-top: 20px;
+}
+
+.form-actions .danger-button {
+    margin-left: 0;
+}
