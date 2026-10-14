@@ -1,5 +1,6 @@
 
 import { useEffect, useState } from "react";
+import toast from "react-hot-toast";
 
 const emptyForm = {
     firstName: "",
@@ -17,7 +18,6 @@ function Instructors() {
     const [formData, setFormData] = useState({ ...emptyForm });
     const [formMode, setFormMode] = useState("edit");
     const [error, setError] = useState("");
-    const [successMessage, setSuccessMessage] = useState("");
 
     // Retrieve all instructors for the dropdown
     const fetchInstructors = async () => {
@@ -33,6 +33,7 @@ function Instructors() {
 
         } catch (error) {
             setError(error.message);
+            toast.error(error.message);
         }
     };
 
@@ -51,7 +52,6 @@ function Instructors() {
 
         try {
             setError("");
-            setSuccessMessage("");
 
             const response = await fetch(
                 `/api/instructor/getInstructor?instructorId=${encodeURIComponent(instructorId)}`
@@ -77,6 +77,7 @@ function Instructors() {
         } catch (error) {
             setInstructorDetails(null);
             setError(error.message);
+            toast.error(error.message);
         }
     };
 
@@ -97,7 +98,6 @@ function Instructors() {
         setInstructorDetails(null);
         setFormData({ ...emptyForm });
         setError("");
-        setSuccessMessage("");
     };
 
     const handleCancel = () => {
@@ -106,7 +106,6 @@ function Instructors() {
         setInstructorDetails(null);
         setFormData({ ...emptyForm });
         setError("");
-        setSuccessMessage("");
     };
 
     const validateInstructor = () => {
@@ -139,8 +138,6 @@ function Instructors() {
     
     const handleAdd = async () => {
         setError("");
-        setSuccessMessage("");
-
         const validationError = validateInstructor();
 
         if (validationError) {
@@ -207,10 +204,11 @@ function Instructors() {
             setFormMode("edit");
             setSelectedId("");
             setInstructorDetails(null);
-            setSuccessMessage("Instructor added successfully.");
+            toast.success("Instructor added successfully!");
 
         } catch (error) {
             setError(error.message);
+            toast.error(error.message);
         }
     };
 
@@ -221,7 +219,6 @@ function Instructors() {
         if (!selectedId) return;
 
         setError("");
-        setSuccessMessage("");
 
         const validationError = validateInstructor();
 
@@ -258,10 +255,11 @@ function Instructors() {
 
             await fetchInstructors();
 
-            setSuccessMessage("Instructor updated successfully.");
+            toast.success("Instructor updated successfully!");
 
         } catch (error) {
             setError(error.message);
+            toast.error(error.message);
         }
     };
 
@@ -276,7 +274,6 @@ function Instructors() {
         if (!confirmed) return;
 
         setError("");
-        setSuccessMessage("");
 
         try {
             const response = await fetch(
@@ -304,10 +301,11 @@ function Instructors() {
 
             await fetchInstructors();
 
-            setSuccessMessage("Instructor deleted successfully.");
+            toast.success("Instructor deleted successfully!");
 
         } catch (error) {
             setError(error.message);
+            toast.error(error.message);
         }
     };
 
@@ -448,19 +446,9 @@ function Instructors() {
                         )}
                     </div>
 
-                    {successMessage && (
-                        <p className="success-message">
-                            {successMessage}
-                        </p>
-                    )}
                 </div>
             )}
 
-            {successMessage && !instructorDetails && formMode === "edit" && (
-                <p className="success-message">
-                    {successMessage}
-                </p>
-            )}
         </div>
     );
 }

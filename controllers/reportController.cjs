@@ -10,15 +10,16 @@ exports.getStudioPerformance = async (req, res) => {
         const sales = await Sale.find({});
         const packages = await Package.find({});
 
-        let totalRevenue = 0;
+        const totalRevenue = sales.reduce(
+            (total, sale) => total + Number(sale.amountPaid || 0),
+            0
+        );
 
         const packageSummary = packages.map((packageItem) => {
 
             const packageSales = sales.filter((sale) => sale.packageId === packageItem.packageId);
 
             const revenue = packageSales.reduce((total, sale) => total + sale.amountPaid, 0);
-
-            totalRevenue += revenue;
 
             return {
                 packageId: packageItem.packageId,

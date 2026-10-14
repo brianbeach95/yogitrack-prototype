@@ -1,5 +1,6 @@
 
 import { useEffect, useState } from "react";
+import toast from "react-hot-toast";
 
 const emptyForm = {
     firstName: "",
@@ -12,6 +13,7 @@ const emptyForm = {
 
 function Customers() {
     const [customers, setCustomers] = useState([]);
+    const [searchTerm, setSearchTerm] = useState("");
     const [selectedId, setSelectedId] = useState("");
     const [customerDetails, setCustomerDetails] = useState(null);
     const [formData, setFormData] = useState({ ...emptyForm });
@@ -30,6 +32,7 @@ function Customers() {
             setCustomers(data);
         } catch (error) {
             setError(error.message);
+            toast.error(error.message);
         }
     };
 
@@ -72,6 +75,7 @@ function Customers() {
         } catch (error) {
             setCustomerDetails(null);
             setError(error.message);
+            toast.error(error.message);
         }
     };
 
@@ -163,7 +167,7 @@ function Customers() {
                 throw new Error(data.message || "Failed to add customer.");
             }
 
-            alert("Customer added successfully!");
+            toast.success("Customer added successfully!");
 
             await fetchCustomers();
             setFormMode("edit");
@@ -172,6 +176,7 @@ function Customers() {
 
         } catch (error) {
             setError(error.message);
+            toast.error(error.message);
         }
     };
 
@@ -200,13 +205,14 @@ function Customers() {
                 throw new Error(data.message || "Failed to update customer.");
             }
 
-            alert("Customer updated successfully!");
+            toast.success("Customer updated successfully!");
 
             await fetchCustomers();
             await fetchCustomerDetails(selectedId);
 
         } catch (error) {
             setError(error.message);
+            toast.error(error.message);
         }
     };
 
@@ -236,7 +242,7 @@ function Customers() {
                 throw new Error(data.message || "Failed to delete customer.");
             }
 
-            alert("Customer deleted successfully!");
+            toast.success("Customer deleted successfully!");
 
             setSelectedId("");
             setCustomerDetails(null);
@@ -246,8 +252,22 @@ function Customers() {
 
         } catch (error) {
             setError(error.message);
+            toast.error(error.message);
         }
     };  
+
+
+    const filteredCustomers = customers.filter((customer) => {
+        const search = searchTerm.trim().toLowerCase();
+
+        const fullName =
+            `${customer.firstName} ${customer.lastName}`.toLowerCase();
+
+        return (
+            fullName.includes(search) ||
+            customer.customerId.toLowerCase().includes(search)
+        );
+    });
 
 
 
@@ -274,6 +294,38 @@ function Customers() {
 
             {formMode === "edit" && (
                 <div className="form-group">
+                    <label htmlFor="customerSearch">
+                        Search Customers
+                    </label>
+
+                    <input
+                        id="customerSearch"
+                        type="search"
+                        placeholder="Search by name or customer ID..."
+                        value={searchTerm}
+                        onChange={(e) => setSearchTerm(e.target.value)}
+                    />
+                    {searchTerm.trim() !== "" && (
+                        <div className="customer-search-results">
+                            {filteredCustomers.length === 0 ? (
+                                <p>No matching customers found.</p>
+                            ) : (
+                                filteredCustomers.map((customer) => (
+                                    <button
+                                        key={customer.customerId}
+                                        type="button"
+                                        onClick={() => {
+                                            setSelectedId(customer.customerId);
+                                            fetchCustomerDetails(customer.customerId);
+                                            setSearchTerm("");
+                                        }}
+                                    >
+                                        {customer.customerId} - {customer.firstName} {customer.lastName}
+                                    </button>
+                                ))
+                            )}
+                        </div>
+                    )}
                     <label htmlFor="customerSelect">
                         Select Customer
                     </label>
@@ -289,7 +341,7 @@ function Customers() {
                     >
                         <option value="">Select a customer</option>
 
-                        {customers.map((customer) => (
+                        {filteredCustomers.map((customer) => (
                             <option
                                 key={customer.customerId}
                                 value={customer.customerId}

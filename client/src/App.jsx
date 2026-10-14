@@ -7,6 +7,13 @@ import Login from "./components/Login";
 import Dashboard from "./components/Dashboard";
 import Instructors from "./components/Instructors";
 import Customers from "./components/Customers";
+import Classes from "./components/Classes";
+import Packages from "./components/Packages";
+import Sales from "./components/Sales";
+import Attendance from "./components/Attendance";
+import AttendanceHistory from "./components/AttendanceHistory";
+import Reports from "./components/Reports";
+import { Toaster } from "react-hot-toast";
 
 function App() {
   const [username, setUsername] = useState("");
@@ -79,49 +86,107 @@ function App() {
 
     if (user) {
         return (
-            <Routes>
-                <Route
-                    element={
-                        <AppLayout
-                            user={user}
-                            handleLogout={handleLogout}
+            <>
+                <Toaster
+                    position="top-right"
+                    toastOptions={{
+                        duration: 3000,
+                        style: {
+                            background: "#ffffff",
+                            color: "#34473c",
+                            border: "1px solid #e2e9e1",
+                            borderRadius: "10px",
+                            padding: "14px 18px"
+                        }
+                    }}
+                />
+                <Routes>
+                    <Route
+                        element={
+                            <AppLayout
+                                user={user}
+                                handleLogout={handleLogout}
+                            />
+                        }
+                    >
+                        <Route
+                            path="/"
+                            element={<Dashboard user={user} />}
                         />
-                    }
-                >
-                    <Route
-                        path="/"
-                        element={<Dashboard user={user} />}
-                    />
 
-                    <Route
-                        path="/schedule"
-                        element={<Schedule />}
-                    />
+                        <Route
+                            path="/schedule"
+                            element={<Schedule />}
+                        />
 
-                    <Route
-                        path="/instructors"
-                        element={
-                            user.role === "Manager"
-                                ? <Instructors />
-                                : <Navigate to="/" replace />
-                        }
-                    />
+                        <Route
+                            path="/instructors"
+                            element={
+                                user.role === "Manager"
+                                    ? <Instructors />
+                                    : <Navigate to="/" replace />
+                            }
+                        />
 
-                    <Route
-                        path="/customers"
-                        element={
-                            user.role === "Manager"
-                                ? <Customers />
-                                : <Navigate to="/" replace />
-                        }
-                    />
+                        <Route
+                            path="/customers"
+                            element={
+                                user.role === "Manager"
+                                    ? <Customers />
+                                    : <Navigate to="/" replace />
+                            }
+                        />
 
-                    <Route
-                        path="*"
-                        element={<Navigate to="/" replace />}
-                    />
-                </Route>
-            </Routes>
+                        <Route
+                            path="/classes"
+                            element={
+                                user.role === "Manager"
+                                    ? <Classes />
+                                    : <Navigate to="/" replace />
+                            }
+                        />
+
+                        <Route
+                            path="/packages"
+                            element={
+                                user.role === "Manager"
+                                    ? <Packages />
+                                    : <Navigate to="/" replace />
+                            }
+                        />
+
+                        <Route
+                            path="/sales"
+                            element={
+                                user.role === "Manager"
+                                    ? <Sales />
+                                    : <Navigate to="/" replace />
+                            }
+                        />
+
+                        <Route path="attendance" element={<Attendance />} />
+
+                        <Route
+                            path="attendance/history"
+                            element={<AttendanceHistory user={user} />}
+                        />
+
+                        <Route
+                            path="/reports"
+                            element={
+                                user.role === "Manager"
+                                    ? <Reports />
+                                    : <Navigate to="/" replace />
+                            }
+                        />
+
+                        <Route
+                            path="*"
+                            element={<Navigate to="/" replace />}
+                        />
+                    </Route>
+                </Routes>
+            </>
         );
     }
 

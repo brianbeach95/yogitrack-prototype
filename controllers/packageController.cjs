@@ -2,6 +2,7 @@ const Package = require("../models/packageModel.cjs");
 const { validateNonNegativeNumber, validateDateRange } = require("../utils/validationUtils.cjs");
 
 const { generateNextId } = require("../utils/idUtils.cjs");
+const Sale = require("../models/saleModel.cjs");
 
 exports.getPackage = async (req, res) => {
   try {
@@ -183,6 +184,21 @@ exports.updatePackage = async (req, res) => {
 exports.deletePackage = async (req, res) => {
   try {
     const { packageId } = req.query;
+
+    if (!packageId) {
+        return res.status(400).json({
+            message: "Package ID is required."
+        });
+    }
+
+    const existingSale = await Sale.exists({ packageId });
+
+    if (existingSale) {
+        return res.status(409).json({
+            message:
+                "Cannot delete this package because it has existing sales records."
+        });
+    }
 
     const result = await Package.findOneAndDelete({
       packageId

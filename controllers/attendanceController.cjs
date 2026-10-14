@@ -108,24 +108,26 @@ exports.add = async (req, res) => {
             });
         }
 
-        const oneHour = 60 * 60 * 1000;
+        const startOfClassDay = new Date(attendanceDate);
+        startOfClassDay.setHours(0, 0, 0, 0);
 
-        const startTime = new Date(attendanceDate.getTime() - oneHour);
-        const endTime = new Date(attendanceDate.getTime() + oneHour);
+        const endOfClassDay = new Date(startOfClassDay);
+        endOfClassDay.setDate(endOfClassDay.getDate() + 1);
 
+        // Prevent duplicate attendance for the same class and date
         const existingAttendance = await Attendance.findOne({
             classId,
             customerId,
             attendanceDateTime: {
-                $gte: startTime,
-                $lte: endTime
+                $gte: startOfClassDay,
+                $lt: endOfClassDay
             }
         });
 
         if (existingAttendance) {
             return res.status(409).json({
                 message:
-                    "Customer is already checked in for this class within one hour"
+                    "Customer is already checked in for this class on this date."
             });
         }
 
@@ -182,20 +184,50 @@ exports.add = async (req, res) => {
             attendanceDateTime
         });
 
+
         await newAttendance.save();
 
-        // for unlimited customers
+        let updatedBalance = customer.classBalance;
+
         if (!hasUnlimitedPackage) {
-            customer.classBalance -= 1;
-            await customer.save();
+            try {
+                const updatedCustomer = await Customer.findOneAndUpdate(
+                    { customerId },
+                    { $inc: { classBalance: -1 } },
+                    { new: true }
+                );
+
+                if (!updatedCustomer) {
+                    throw new Error("Customer no longer exists");
+                }
+
+                updatedBalance = updatedCustomer.classBalance;
+
+            } catch (balanceError) {
+                // Attempt to remove the attendance record
+                // if the balance update fails.
+                try {
+                    await Attendance.deleteOne({
+                        _id: newAttendance._id
+                    });
+                } catch (rollbackError) {
+                    console.error(
+                        "Failed to undo attendance:",
+                        rollbackError
+                    );
+                }
+
+                throw balanceError;
+            }
         }
 
-        res.status(201).json({
+        return res.status(201).json({
             message: "Check-in recorded successfully",
             attendance: newAttendance,
-            classBalance: customer.classBalance,
+            classBalance: updatedBalance,
             unlimited: hasUnlimitedPackage
         });
+
 
     } catch (err) {
         console.error("Error recording check-in:", err.message);

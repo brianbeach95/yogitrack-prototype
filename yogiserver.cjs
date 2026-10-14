@@ -1,9 +1,10 @@
 const express = require("express");
 const session = require("express-session");
 const app = express();
+const path = require("path");
 
 // Serve static files from the public dir
-app.use(express.static("public"));
+app.use(express.static("public", { index: false }));
 app.use(express.json());
 
 app.use(session({
@@ -25,6 +26,14 @@ app.use("/api/class", require("./routes/classRoutes.cjs"));
 app.use("/api/sale", require("./routes/saleRoutes.cjs"));
 app.use("/api/attendance", require("./routes/attendanceRoutes.cjs"));
 app.use("/api/report", require("./routes/reportRoutes.cjs"));
+
+const clientDist = path.join(__dirname, "client", "dist");
+
+app.use(express.static(clientDist));
+
+app.get("/{*splat}", (req, res) => {
+    res.sendFile(path.join(clientDist, "index.html"));
+});
 
 
 

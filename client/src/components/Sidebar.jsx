@@ -21,13 +21,13 @@ function Sidebar({ user, handleLogout }) {
                     <>
                         <NavLink to="/customers">Customers</NavLink>
                         <NavLink to="/instructors">Instructors</NavLink>
-                        <a href="#">Classes</a>
+                        <NavLink to="/classes">Classes</NavLink>
                         <NavLink to="/schedule">Class Schedule</NavLink>
-                        <a href="#">Packages</a>
-                        <a href="#">Sales</a>
-                        <a href="#">Check-ins</a>
-                        <a href="#">View Attendance</a>
-                        <a href="#">Reports</a>
+                        <NavLink to="/packages">Packages</NavLink>
+                        <NavLink to="/sales">Sales</NavLink>
+                        <NavLink to="/attendance" end>Check-ins</NavLink>
+                        <NavLink to="/attendance/history">View Attendance</NavLink>
+                        <NavLink to="/reports">Reports</NavLink>
                     </>
                 )}
         
@@ -35,7 +35,8 @@ function Sidebar({ user, handleLogout }) {
                 {user.role === "Instructor" && (
                     <>
                         <NavLink to="/schedule">My Schedule</NavLink>
-                        <a href="#">Check-ins</a>
+                        <NavLink to="/attendance" end>Check-ins</NavLink>
+                        <NavLink to="/attendance/history">My Attendance</NavLink>
                         <a href="#">My Performance</a>
                     </>
                 )}

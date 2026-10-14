@@ -1,6 +1,7 @@
 const Class = require("../models/classModel.cjs");
 const { validateNonNegativeNumber } = require("../utils/validationUtils.cjs");
 const { generateNextId} = require("../utils/idUtils.cjs");
+const Attendance = require("../models/attendanceModel.cjs");
 
 const possibleTimes = ["09:00","10:00","11:00","12:00","13:00","14:00","15:00",
                        "16:00","17:00","18:00","19:00","20:00"];
@@ -280,6 +281,15 @@ exports.updateClass = async (req, res) => {
 exports.deleteClass = async (req, res) => {
     try {
         const { classId } = req.query;
+
+        const existingAttendance = await Attendance.exists({ classId });
+
+        if (existingAttendance) {
+            return res.status(409).json({
+                message:
+                    "Cannot delete this class because it has existing attendance records."
+            });
+        }
 
         const result = await Class.findOneAndDelete({
             classId

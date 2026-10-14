@@ -19,6 +19,8 @@ exports.getNextId = async (req, res) => {
     }
 };
 
+
+
 exports.add = async (req, res) => {
     try {
         const {
@@ -31,14 +33,19 @@ exports.add = async (req, res) => {
             validityEndDate
         } = req.body;
 
-        // Check required fields
-        if (!customerId || !packageId || amountPaid === undefined || !paymentMode || !dateTimePaid || !validityStartDate || !validityEndDate ) {
+        if (
+            !customerId || !packageId ||
+            amountPaid === undefined || amountPaid === null ||
+            amountPaid === "" || !paymentMode || !dateTimePaid ||
+            !validityStartDate || !validityEndDate
+        ) {
             return res.status(400).json({
                 message: "Missing required fields"
             });
         }
 
         const customer = await Customer.findOne({ customerId });
+
         if (!customer) {
             return res.status(404).json({
                 message: "Customer not found"
@@ -46,22 +53,35 @@ exports.add = async (req, res) => {
         }
 
         const packageItem = await Package.findOne({ packageId });
+
         if (!packageItem) {
             return res.status(404).json({
                 message: "Package not found"
             });
         }
 
-        if (Number(amountPaid) !== Number(packageItem.price)) {
+        if (
+            !Number.isFinite(Number(amountPaid)) ||
+            Number(amountPaid) !== Number(packageItem.price)
+        ) {
             return res.status(400).json({
-                message:
-                    `Amount paid must equal the package price of $${packageItem.price.toFixed(2)}`
+                message: `Amount paid must equal the package price of $${Number(packageItem.price).toFixed(2)}`
             });
         }
 
-        // Make sure validity dates make sense
         const startDate = new Date(validityStartDate);
         const endDate = new Date(validityEndDate);
+        const paymentDate = new Date(dateTimePaid);
+
+        if (
+            Number.isNaN(startDate.getTime()) ||
+            Number.isNaN(endDate.getTime()) ||
+            Number.isNaN(paymentDate.getTime())
+        ) {
+            return res.status(400).json({
+                message: "Invalid payment or validity date"
+            });
+        }
 
         if (endDate < startDate) {
             return res.status(400).json({
@@ -69,14 +89,29 @@ exports.add = async (req, res) => {
             });
         }
 
-        // Generate Sale ID
+        const classesPurchased = Number(packageItem.numberOfClasses);
+
+        if (
+            !Number.isInteger(classesPurchased) ||
+            classesPurchased <= 0
+        ) {
+            return res.status(400).json({
+                message: "Package must contain a positive number of classes"
+            });
+        }
+
+        // Generate next Sale ID
         const lastSale = await Sale.find({
             saleId: /^S\d+$/
         })
-        .sort({ saleId: -1 })
-        .limit(1);
+            .sort({ saleId: -1 })
+            .limit(1);
 
-        const saleId = generateNextId(lastSale, "saleId", "S");
+        const saleId = generateNextId(
+            lastSale,
+            "saleId",
+            "S"
+        );
 
         const newSale = new Sale({
             saleId,
@@ -84,32 +119,56 @@ exports.add = async (req, res) => {
             packageId,
             amountPaid: Number(amountPaid),
             paymentMode,
-            dateTimePaid,
-            validityStartDate,
-            validityEndDate
+            dateTimePaid: paymentDate,
+            validityStartDate: startDate,
+            validityEndDate: endDate
         });
 
+        // Save the sale first
         await newSale.save();
 
-        if (packageItem.numberOfClasses !== "Unlimited") {
-            const classesPurchased = Number(packageItem.numberOfClasses);
-            customer.classBalance += classesPurchased;
-            await customer.save();
+        let updatedCustomer;
+
+        try {
+            // Increment balance directly in MongoDB
+            updatedCustomer = await Customer.findOneAndUpdate(
+                { customerId },
+                { $inc: { classBalance: classesPurchased } },
+                { new: true }
+            );
+
+            if (!updatedCustomer) {
+                throw new Error("Customer no longer exists");
+            }
+
+        } catch (balanceError) {
+            // Attempt to undo the sale if balance update fails
+            try {
+                await Sale.deleteOne({ _id: newSale._id });
+            } catch (rollbackError) {
+                console.error(
+                    "Failed to undo sale after balance update error:",
+                    rollbackError
+                );
+            }
+
+            throw balanceError;
         }
 
-        res.status(201).json({
+        return res.status(201).json({
             message: "Sale recorded successfully",
             sale: newSale,
-            classBalance: customer.classBalance,
-            unlimited: packageItem.numberOfClasses === "Unlimited"
+            classBalance: updatedCustomer.classBalance,
+            unlimited: false
         });
 
     } catch (err) {
-        console.error("Error recording sale:", err.message);
+        console.error("Error recording sale:", err);
 
-        res.status(500).json({
+        return res.status(500).json({
             message: "Failed to record sale",
             error: err.message
         });
     }
 };
+
