@@ -64,7 +64,18 @@ YogiTrack is a full-stack web application developed for Yoga H'om to manage dail
 
 6. Open **http://localhost:5173** in a browser. Vite forwards `/api` requests to the Express backend, which runs on **http://localhost:8080** by default.
 
-**Note:** Signing in requires an existing Manager or Instructor account in the connected database. This repository does not provide public demo credentials.
+## Test Accounts
+
+The following demo accounts can be used to explore the deployed application:
+
+| Role | Username | Password |
+| --- | --- | --- |
+| Instructor | `janderson` | `YogiTest123!` |
+| Manager | `rthompson` | `!thomPsonTest222` |
+
+Use the **Instructor** account to view assigned classes, record attendance, and review personal performance. Use the **Manager** account to access studio management features and reports.
+
+**Note:** These are publicly documented test credentials. Use them only for demo accounts with no sensitive data or access to other services. Local login requires these accounts to exist in the database you connect to.
 
 ## Deployment
 
