@@ -13,6 +13,7 @@ import Sales from "./components/Sales";
 import Attendance from "./components/Attendance";
 import AttendanceHistory from "./components/AttendanceHistory";
 import Reports from "./components/Reports";
+import MyPerformance from "./components/MyPerformance";
 import { Toaster } from "react-hot-toast";
 
 function App() {
@@ -176,6 +177,15 @@ function App() {
                             element={
                                 user.role === "Manager"
                                     ? <Reports />
+                                    : <Navigate to="/" replace />
+                            }
+                        />
+
+                        <Route
+                            path="/my-performance"
+                            element={
+                                user.role === "Instructor"
+                                    ? <MyPerformance />
                                     : <Navigate to="/" replace />
                             }
                         />

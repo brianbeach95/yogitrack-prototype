@@ -37,7 +37,7 @@ function Sidebar({ user, handleLogout }) {
                         <NavLink to="/schedule">My Schedule</NavLink>
                         <NavLink to="/attendance" end>Check-ins</NavLink>
                         <NavLink to="/attendance/history">My Attendance</NavLink>
-                        <a href="#">My Performance</a>
+                        <NavLink to="/my-performance">My Performance</NavLink>
                     </>
                 )}
 
